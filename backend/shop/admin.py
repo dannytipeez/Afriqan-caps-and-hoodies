@@ -37,3 +37,4 @@ class OrderAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('author', 'product', 'rating', 'verified_buyer', 'date_str')
     list_filter = ('rating', 'verified_buyer')
+

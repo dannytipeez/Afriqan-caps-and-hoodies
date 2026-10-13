@@ -46,3 +46,4 @@ databases:
     region: oregon
     databaseName: afriqan_db
     user: afriqan_user
+

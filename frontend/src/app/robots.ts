@@ -10,3 +10,4 @@ export default function robots(): MetadataRoute.Robots {
     sitemap: 'https://afriqan-caps-and-hoodies.onrender.com/sitemap.xml',
   };
 }
+

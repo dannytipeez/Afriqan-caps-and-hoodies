@@ -283,3 +283,4 @@ function getFallbackProductDetail(slug: string) {
     ],
   };
 }
+

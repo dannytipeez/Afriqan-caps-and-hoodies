@@ -75,3 +75,4 @@ This repository includes a native `render.yaml` blueprint:
 Continuous Integration and automated checks are configured in `.github/workflows/ci-cd.yml`:
 - Runs Python system check, migrations, and database seed verification.
 - Runs Next.js TypeScript check, linting, and production compilation (`next build`).
+

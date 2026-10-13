@@ -284,3 +284,4 @@ def get_order(request, order_number: str):
             for it in order.items.all()
         ]
     }
+
