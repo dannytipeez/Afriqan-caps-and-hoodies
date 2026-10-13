@@ -26,12 +26,15 @@ export default function Header() {
           {/* Navigation Links */}
           <nav className="hidden md:flex items-center gap-7 text-xs font-semibold uppercase tracking-wider text-neutral-800">
             <Link href="/" className="hover:text-black transition-colors">
-              Shop all
+              Home
             </Link>
-            <Link href="/?category=caps" className="hover:text-black transition-colors">
+            <Link href="/shop" className="hover:text-black transition-colors">
+              Shop All
+            </Link>
+            <Link href="/shop?category=caps" className="hover:text-black transition-colors">
               Caps
             </Link>
-            <Link href="/?category=hoodies" className="hover:text-black transition-colors">
+            <Link href="/shop?category=hoodies" className="hover:text-black transition-colors">
               Hoodies
             </Link>
             <Link href="/our-story" className="text-neutral-500 hover:text-black transition-colors">
@@ -42,9 +45,9 @@ export default function Header() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-5 text-neutral-800">
-          <button aria-label="Search" className="hover:text-black transition-colors cursor-pointer">
+          <Link href="/shop" aria-label="Search" className="hover:text-black transition-colors cursor-pointer">
             <Search size={18} strokeWidth={2} />
-          </button>
+          </Link>
           <Link href="/account" aria-label="Account" className="hover:text-black transition-colors">
             <User size={18} strokeWidth={2} />
           </Link>
