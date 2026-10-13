@@ -1,0 +1,48 @@
+services:
+  # Backend API: Django Ninja
+  - type: web
+    name: afriqan-backend
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: .
+    plan: starter
+    region: oregon
+    healthCheckPath: /api/shop/products
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com,localhost,127.0.0.1"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: afriqan-postgres
+          property: connectionString
+
+  # Frontend: Next.js
+  - type: web
+    name: afriqan-frontend
+    runtime: docker
+    dockerfilePath: frontend/Dockerfile
+    dockerContext: .
+    plan: starter
+    region: oregon
+    healthCheckPath: /
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: afriqan-backend
+          envVarKey: RENDER_EXTERNAL_URL
+          transformation: "${RENDER_EXTERNAL_URL}/api/shop"
+      - key: NODE_ENV
+        value: production
+
+databases:
+  # Managed PostgreSQL Database
+  - name: afriqan-postgres
+    plan: starter
+    region: oregon
+    databaseName: afriqan_db
+    user: afriqan_user
