@@ -7,41 +7,47 @@ import { CartProvider } from "@/context/CartContext";
 export const metadata: Metadata = {
   metadataBase: new URL("https://afriqan-caps-and-hoodies.onrender.com"),
   title: {
-    default: "Afriqan Caps and Hoodies® | The Daily Rotation",
-    template: "%s | Afriqan Caps and Hoodies®",
+    default: "Afriqan Caps and Hoodies® Kenya | Premium Streetwear in Nairobi",
+    template: "%s | Afriqan Caps and Hoodies® Kenya",
   },
   description:
-    "Afriqan Caps and Hoodies: Considered daily essentials. Heavyweight 460 GSM organic cotton hoodies and premium 6-panel embroidered streetwear caps. Worldwide and US shipping.",
+    "Buy premium heavyweight 460 GSM cotton hoodies & streetwear caps in Kenya. Custom DTF/screen printing add-on for only KES 500. Same-day & next-day delivery in Nairobi, Mombasa, Kisumu, Nakuru, and countrywide. Pay conveniently via Lipa na M-Pesa Buy Goods Till 4466556 or Cash on Delivery.",
   keywords: [
-    "Afriqan caps",
-    "Afriqan hoodies",
-    "heavyweight hoodie",
-    "460 GSM cotton hoodie",
-    "streetwear caps",
-    "luxury minimalist apparel",
-    "organic cotton essentials",
+    "hoodies kenya",
+    "caps kenya",
+    "hoodies in nairobi",
+    "streetwear kenya",
+    "custom hoodies nairobi",
+    "custom hoodie printing kenya",
+    "plain hoodies kenya",
+    "heavyweight hoodie kenya",
+    "460 gsm hoodie kenya",
+    "lipa na mpesa till 4466556",
+    "cash on delivery hoodies nairobi",
+    "afriqan tees and caps hub",
+    "snapbacks nairobi",
   ],
-  authors: [{ name: "Afriqan Studio", url: "https://afriqan.studio" }],
+  authors: [{ name: "Afriqan Tees and Caps Hub Kenya", url: "https://afriqan-caps-and-hoodies.onrender.com" }],
   openGraph: {
-    title: "Afriqan Caps and Hoodies® | Considered Essentials",
-    description: "Considered essentials. Nothing more, nothing less. Luxury heavyweight hoodies & caps.",
+    title: "Afriqan Caps and Hoodies® Kenya | Heavyweight Hoodies & Caps in KES",
+    description: "Considered Kenyan streetwear essentials. Heavyweight 460 GSM hoodies with custom printing add-on (+KES 500). Lipa na M-Pesa & Cash on Delivery.",
     url: "https://afriqan-caps-and-hoodies.onrender.com",
-    siteName: "Afriqan Caps & Hoodies",
+    siteName: "Afriqan Caps & Hoodies Kenya",
     images: [
       {
         url: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=1200&q=80",
         width: 1200,
         height: 630,
-        alt: "Afriqan Caps and Hoodies Core Collection",
+        alt: "Afriqan Caps and Hoodies Kenya Streetwear Collection",
       },
     ],
-    locale: "en_US",
+    locale: "en_KE",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Afriqan Caps and Hoodies®",
-    description: "Considered essentials. Heavyweight 460 GSM hoodies and bespoke caps.",
+    title: "Afriqan Caps and Hoodies® Kenya",
+    description: "Kenya's premier heavyweight hoodies & streetwear caps. Lipa na M-Pesa Till 4466556.",
     images: ["https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=1200&q=80"],
   },
   robots: {
@@ -52,10 +58,10 @@ export const metadata: Metadata = {
     canonical: "https://afriqan-caps-and-hoodies.onrender.com",
   },
   other: {
-    "geo.region": "US-CA",
-    "geo.placename": "Los Angeles",
-    "geo.position": "34.0522;-118.2437",
-    "ICBM": "34.0522, -118.2437",
+    "geo.region": "KE-30", // Nairobi County, Kenya
+    "geo.placename": "Nairobi, Kenya",
+    "geo.position": "-1.2921;36.8219", // Nairobi coordinates
+    "ICBM": "-1.2921, 36.8219",
   },
 };
 
@@ -64,33 +70,35 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Structured Data Schema for Search Engines (JSON-LD)
+  // Structured Data Schema for Search Engines (JSON-LD) localized for Nairobi, Kenya
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ClothingStore",
-    name: "Afriqan Caps and Hoodies",
+    name: "Afriqan Caps and Hoodies Hub Kenya",
     image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=1200&q=80",
-    description: "Premium e-commerce boutique specializing in luxury heavyweight hoodies and bespoke embroidered caps.",
+    description: "Leading clothing boutique in Nairobi, Kenya providing luxury heavyweight plain and custom printed hoodies, caps, and streetwear. Lipa na M-Pesa Till 4466556.",
+    telephone: "+254712345678",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "128 Sunset Avenue",
-      addressLocality: "Los Angeles",
-      addressRegion: "CA",
-      postalCode: "90026",
-      addressCountry: "US",
+      streetAddress: "Wood Avenue, Kilimani / Westlands Commercial Hub",
+      addressLocality: "Nairobi",
+      addressRegion: "Nairobi County",
+      postalCode: "00100",
+      addressCountry: "KE",
     },
     geo: {
       "@type": "GeoCoordinates",
-      latitude: "34.0522",
-      longitude: "-118.2437",
+      latitude: "-1.2921",
+      longitude: "36.8219",
     },
-    currenciesAccepted: "USD",
-    paymentAccepted: "Credit Card, Apple Pay, PayPal",
-    priceRange: "$38 - $120",
+    currenciesAccepted: "KES",
+    paymentAccepted: "M-Pesa, Cash on Delivery",
+    priceRange: "KES 1500 - KES 4500",
     url: "https://afriqan-caps-and-hoodies.onrender.com",
+    openingHours: "Mo-Sa 08:00-19:00",
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "Core Essentials Vol. 01",
+      name: "Kenyan Streetwear Collection",
       itemListElement: [
         {
           "@type": "Offer",
@@ -98,6 +106,8 @@ export default function RootLayout({
             "@type": "Product",
             name: "The Heavyweight Hoodie",
             category: "Hoodies",
+            price: "3500",
+            priceCurrency: "KES",
           },
         },
         {
@@ -106,6 +116,8 @@ export default function RootLayout({
             "@type": "Product",
             name: "The Afriqan Signature Cap",
             category: "Caps",
+            price: "1500",
+            priceCurrency: "KES",
           },
         },
       ],

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Search, User, ShoppingBag } from 'lucide-react';
+import { Search, User } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 export default function Header() {
@@ -10,9 +10,9 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-[#FBFBF9]/95 backdrop-blur-md border-b border-[#EBEBE8]">
-      {/* Top Banner */}
+      {/* Top Banner Kenya edition */}
       <div className="bg-[#121212] text-white text-[11px] tracking-wider font-medium text-center py-2 px-4 uppercase">
-        GOOD THINGS TAKE NO EFFORT. FREE US SHIPPING ON ORDERS $100+
+        🇰🇪 NAIROBI & KENYA WIDE DELIVERY · FREE SHIPPING ON ORDERS OVER KES 5,000 · PAY VIA M-PESA
       </div>
 
       {/* Main Nav */}
@@ -61,4 +61,3 @@ export default function Header() {
     </header>
   );
 }
-

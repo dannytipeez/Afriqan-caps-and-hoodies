@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart, Plus } from 'lucide-react';
+import { Heart, Plus, Sparkles } from 'lucide-react';
 import { ProductListItem } from '@/types';
 import { useCart } from '@/context/CartContext';
 
@@ -28,6 +28,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       quantity: 1,
       image: product.primary_image,
       inStock: product.in_stock,
+      hasCustomPrint: false,
     });
   };
 
@@ -46,11 +47,18 @@ export default function ProductCard({ product }: ProductCardProps) {
         </Link>
 
         {/* Badge on top-left if present */}
-        {product.badge && (
-          <span className="absolute top-3 left-3 bg-white/95 text-black text-[10px] font-bold tracking-wider px-2 py-0.5 uppercase shadow-xs">
-            {product.badge}
-          </span>
-        )}
+        <div className="absolute top-3 left-3 flex flex-col gap-1 items-start">
+          {product.badge && (
+            <span className="bg-white/95 text-black text-[10px] font-bold tracking-wider px-2 py-0.5 uppercase shadow-xs">
+              {product.badge}
+            </span>
+          )}
+          {product.supports_custom_print && (
+            <span className="bg-[#D2DB6B] text-black text-[9px] font-black tracking-wider px-2 py-0.5 uppercase shadow-xs flex items-center gap-1">
+              <Sparkles size={10} /> Custom Print +KES 500
+            </span>
+          )}
+        </div>
 
         {/* Wishlist Heart Icon top-right */}
         <button
@@ -81,8 +89,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             </Link>
             <p className="text-xs text-neutral-500 mt-0.5">{product.tagline}</p>
           </div>
-          <span className="text-sm font-semibold text-neutral-900">
-            ${product.price.toFixed(2)}
+          <span className="text-sm font-bold text-neutral-900 whitespace-nowrap">
+            KES {product.price.toLocaleString()}
           </span>
         </div>
 
@@ -108,4 +116,3 @@ export default function ProductCard({ product }: ProductCardProps) {
     </div>
   );
 }
-

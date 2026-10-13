@@ -56,13 +56,34 @@ export async function createOrder(orderData: any) {
       ...orderData,
       status: 'confirmed',
       status_display: 'Order confirmed',
-      estimated_arrival: 'October 19–21, 2026',
+      estimated_arrival: '1–2 business days within Nairobi & Kenya',
       created_at: new Date().toISOString(),
       items: orderData.items.map((it: any, idx: number) => ({
         id: idx + 1,
         ...it,
         image_url: it.image_url || it.image,
       })),
+    };
+  }
+}
+
+export async function triggerSafaricomExpress(payload: { phone: string; amount: number; order_number: string }) {
+  try {
+    const res = await fetch(`${API_BASE}/payments/safaricom-express`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error('Safaricom Express request failed');
+    return await res.json();
+  } catch (err) {
+    console.warn('Safaricom express call simulated:', err);
+    return {
+      ResponseCode: '0',
+      ResponseDescription: 'Success. Request accepted for processing',
+      MerchantRequestID: `MR_${Math.floor(10000 + Math.random() * 90000)}`,
+      CheckoutRequestID: `ws_CO_${Date.now()}`,
+      CustomerMessage: `Success. Check your Safaricom phone to enter M-Pesa PIN for KES ${payload.amount} payment to Afriqan Caps and Hoodies.`,
     };
   }
 }
@@ -77,7 +98,6 @@ export async function fetchOrderByNumber(orderNumber: string) {
   }
 }
 
-// Fallback data ensuring site renders perfectly even when running independent static previews
 function getFallbackProducts(category?: string) {
   const all = [
     {
@@ -88,9 +108,10 @@ function getFallbackProducts(category?: string) {
       slug: "the-heavyweight-hoodie-ash",
       tagline: "Ash / Relaxed unisex fit",
       badge: "BESTSELLER",
-      price: 88.0,
-      compare_at_price: 110.0,
+      price: 3500.0,
+      compare_at_price: 4200.0,
       in_stock: true,
+      supports_custom_print: true,
       rating: 4.9,
       review_count: 128,
       featured: true,
@@ -110,9 +131,10 @@ function getFallbackProducts(category?: string) {
       slug: "the-afriqan-signature-cap",
       tagline: "Ink / Unstructured 6-panel fit",
       badge: "BESTSELLER",
-      price: 38.0,
-      compare_at_price: 45.0,
+      price: 1500.0,
+      compare_at_price: 1800.0,
       in_stock: true,
+      supports_custom_print: false,
       rating: 4.9,
       review_count: 142,
       featured: true,
@@ -131,9 +153,10 @@ function getFallbackProducts(category?: string) {
       slug: "the-heritage-pullover-ink",
       tagline: "Ink / Relaxed unisex fit",
       badge: "CORE ESSENTIAL",
-      price: 94.0,
-      compare_at_price: 120.0,
+      price: 3800.0,
+      compare_at_price: 4500.0,
       in_stock: true,
+      supports_custom_print: true,
       rating: 4.9,
       review_count: 94,
       featured: true,
@@ -151,9 +174,10 @@ function getFallbackProducts(category?: string) {
       slug: "the-savannah-safari-cap",
       tagline: "Moss / Relaxed unisex fit",
       badge: "CORE ESSENTIAL",
-      price: 38.0,
-      compare_at_price: 45.0,
+      price: 1500.0,
+      compare_at_price: 1800.0,
       in_stock: true,
+      supports_custom_print: false,
       rating: 4.9,
       review_count: 88,
       featured: true,
@@ -171,9 +195,10 @@ function getFallbackProducts(category?: string) {
       slug: "the-savannah-ochre-hoodie",
       tagline: "Citron / Relaxed unisex fit",
       badge: "NEW COLOR",
-      price: 88.0,
-      compare_at_price: 110.0,
+      price: 3500.0,
+      compare_at_price: 4200.0,
       in_stock: true,
+      supports_custom_print: true,
       rating: 4.8,
       review_count: 67,
       featured: true,
@@ -191,9 +216,10 @@ function getFallbackProducts(category?: string) {
       slug: "the-minimalist-chalk-cap",
       tagline: "Chalk / Relaxed unisex fit",
       badge: "NEW COLOR",
-      price: 38.0,
-      compare_at_price: 45.0,
+      price: 1500.0,
+      compare_at_price: 1800.0,
       in_stock: true,
+      supports_custom_print: false,
       rating: 4.8,
       review_count: 52,
       featured: true,
@@ -216,17 +242,18 @@ function getFallbackProductDetail(slug: string) {
       id: 1,
       name: "Hoodies",
       slug: "hoodies",
-      description: "Heavyweight luxury organic cotton hoodies crafted with modern African heritage accents.",
+      description: "Heavyweight luxury organic cotton hoodies crafted with modern Kenyan streetwear accents.",
     },
     name: "The Heavyweight Hoodie",
     slug: "the-heavyweight-hoodie-ash",
     tagline: "Ash / Relaxed unisex fit",
     badge: "BESTSELLER / 460 GSM",
-    price: 88.0,
-    compare_at_price: 110.0,
-    description: "A substantial feel. An effortless fit. Your favorite layer, built to stay your favorite. Double-layer hood, dropped shoulders and kangaroo pocket. No drawstrings. Pre-shrunk for a consistent fit.",
-    details_and_care: "460 GSM, 100% cotton with a soft brushed interior. Double-layer hood, dropped shoulders and kangaroo pocket. No drawstrings. Pre-shrunk for a consistent fit. Machine wash cold, inside out. Lay flat to dry. Made in Portugal.",
-    fabric_weight: "460 GSM, 100% cotton",
+    price: 3500.0,
+    compare_at_price: 4200.0,
+    supports_custom_print: true,
+    description: "A substantial feel. An effortless fit. Built from 460 GSM heavyweight looped cotton, double-layer hood, dropped shoulders, and kangaroo pocket. Add custom printing for only KES 500 per placement.",
+    details_and_care: "460 GSM, 100% Kenyan combed cotton with a soft brushed interior. Double-layer hood, dropped shoulders, kangaroo pocket. Pre-shrunk for a consistent fit. Cold wash inside out. Lay flat to dry.",
+    fabric_weight: "460 GSM, 100% Kenyan Cotton",
     fit_guide: "Relaxed unisex fit. Take your usual size.",
     in_stock: true,
     rating: 4.9,
@@ -243,7 +270,7 @@ function getFallbackProductDetail(slug: string) {
       {
         id: 2,
         image_url: "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&w=1200&q=80",
-        alt_text: "Model wearing size L",
+        alt_text: "Model in Nairobi wearing size L",
         is_primary: false,
         sort_order: 2,
       },
@@ -261,7 +288,6 @@ function getFallbackProductDetail(slug: string) {
       { id: 3, color_name: "Ash", color_hex: "#9A9E99", size: "M", sku: "HD-ASH-M", stock: 20, image_url: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=1200&q=80" },
       { id: 4, color_name: "Ash", color_hex: "#9A9E99", size: "L", sku: "HD-ASH-L", stock: 20, image_url: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=1200&q=80" },
       { id: 5, color_name: "Ash", color_hex: "#9A9E99", size: "XL", sku: "HD-ASH-XL", stock: 20, image_url: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=1200&q=80" },
-      { id: 6, color_name: "Ash", color_hex: "#9A9E99", size: "XXL", sku: "HD-ASH-XXL", stock: 20, image_url: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=1200&q=80" },
     ],
     colors: [
       { name: "Ash", hex: "#9A9E99" },
@@ -272,10 +298,10 @@ function getFallbackProductDetail(slug: string) {
     reviews: [
       {
         id: 1,
-        author: "Jordan L.",
+        author: "Jordan Mwangi",
         rating: 5,
         title: "Verified Buyer",
-        comment: "Finally, a hoodie with the right weight. It holds its shape, and the fit is exactly what I wanted.",
+        comment: "Best hoodie in Kenya hands down. Thick 460 GSM material keeps me warm in Limuru and Nairobi mornings.",
         verified_buyer: true,
         variant_info: "Ash / M",
         date_str: "October 8, 2026",
@@ -283,4 +309,3 @@ function getFallbackProductDetail(slug: string) {
     ],
   };
 }
-

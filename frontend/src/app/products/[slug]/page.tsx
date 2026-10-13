@@ -3,7 +3,7 @@
 import React, { use, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight, Star, Check } from 'lucide-react';
+import { ArrowUpRight, Star, Check, Sparkles } from 'lucide-react';
 import { fetchProductBySlug, fetchProducts } from '@/lib/api';
 import { ProductDetail, ProductListItem } from '@/types';
 import { useCart } from '@/context/CartContext';
@@ -23,6 +23,11 @@ export default function ProductDetailPage({
   const [quantity, setQuantity] = useState<number>(1);
   const [unitMeasure, setUnitMeasure] = useState<'CM' | 'IN'>('CM');
   const [addedSuccess, setAddedSuccess] = useState<boolean>(false);
+
+  // Custom printing add-on states
+  const [enableCustomPrint, setEnableCustomPrint] = useState<boolean>(false);
+  const [customPrintText, setCustomPrintText] = useState<string>('');
+  const [customPrintPlacement, setCustomPrintPlacement] = useState<string>('Chest Front');
 
   const { addToCart } = useCart();
 
@@ -53,6 +58,10 @@ export default function ProductDetailPage({
     );
   }
 
+  const customPrintFeePerItem = enableCustomPrint && product.supports_custom_print ? 500 : 0;
+  const unitTotal = product.price + customPrintFeePerItem;
+  const lineTotal = unitTotal * quantity;
+
   const handleAddToCart = () => {
     if (!product) return;
     addToCart({
@@ -65,6 +74,10 @@ export default function ProductDetailPage({
       quantity,
       image: selectedImage || product.images[0]?.image_url,
       inStock: product.in_stock,
+      hasCustomPrint: enableCustomPrint && product.supports_custom_print,
+      customPrintText: enableCustomPrint ? customPrintText || 'Custom Brand Logo' : '',
+      customPrintPlacement: enableCustomPrint ? customPrintPlacement : '',
+      customPrintFee: customPrintFeePerItem,
     });
     setAddedSuccess(true);
     setTimeout(() => setAddedSuccess(false), 2500);
@@ -95,14 +108,21 @@ export default function ProductDetailPage({
               sizes="(max-width: 1024px) 100vw, 60vw"
               className="object-cover object-center"
             />
-            {product.badge && (
-              <span className="absolute top-4 left-4 bg-white/95 text-black text-[10px] font-bold tracking-wider px-2 py-0.5 uppercase shadow-xs">
-                {product.badge}
-              </span>
-            )}
+            <div className="absolute top-4 left-4 flex flex-col gap-1.5 items-start">
+              {product.badge && (
+                <span className="bg-white/95 text-black text-[10px] font-bold tracking-wider px-2 py-0.5 uppercase shadow-xs">
+                  {product.badge}
+                </span>
+              )}
+              {product.supports_custom_print && (
+                <span className="bg-[#D2DB6B] text-black text-[10px] font-black tracking-wider px-2 py-0.5 uppercase shadow-xs flex items-center gap-1">
+                  <Sparkles size={11} /> Custom Print Option Available (+KES 500)
+                </span>
+              )}
+            </div>
           </div>
 
-          {/* Sub Gallery Images Grid matching screenshot */}
+          {/* Sub Gallery Images Grid */}
           {product.images.length > 1 && (
             <div className="grid grid-cols-2 gap-4 pt-2">
               {product.images.slice(1, 3).map((img) => (
@@ -124,7 +144,7 @@ export default function ProductDetailPage({
           )}
 
           <p className="text-[11px] text-neutral-400 font-mono pt-1">
-            Model is 6&apos;1&quot; / 185 cm and wears size L. Photography shows {selectedColor || 'Ash'}.
+            Model in Nairobi is 6&apos;1&quot; / 185 cm and wears size L. Photography shows {selectedColor || 'Ash'}.
           </p>
         </div>
 
@@ -140,9 +160,16 @@ export default function ProductDetailPage({
 
             {/* Price and Rating */}
             <div className="flex items-center justify-between mt-3">
-              <span className="text-2xl font-bold text-neutral-900">
-                ${product.price.toFixed(2)}
-              </span>
+              <div>
+                <span className="text-2xl font-black text-neutral-900">
+                  KES {product.price.toLocaleString()}
+                </span>
+                {enableCustomPrint && (
+                  <span className="ml-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-xs border border-emerald-200">
+                    + KES 500 Custom Print
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-1.5 text-xs text-neutral-700">
                 <div className="flex text-black">
                   {[...Array(5)].map((_, i) => (
@@ -222,10 +249,75 @@ export default function ProductDetailPage({
             </p>
           </div>
 
+          {/* CUSTOM PRINTING ADD-ON FOR PLAIN HOODIES (KES 500) */}
+          {product.supports_custom_print && (
+            <div className="p-4 bg-[#F8F8F5] border-2 border-[#D2DB6B] rounded-xs space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={enableCustomPrint}
+                    onChange={(e) => setEnableCustomPrint(e.target.checked)}
+                    className="w-4 h-4 text-black rounded-xs focus:ring-0 cursor-pointer"
+                  />
+                  <span className="text-xs font-bold text-neutral-900 flex items-center gap-1.5">
+                    <Sparkles size={14} className="text-[#96A020]" />
+                    Add Custom Printing
+                  </span>
+                </label>
+                <span className="text-xs font-bold text-black bg-[#D2DB6B] px-2 py-0.5 rounded-xs">
+                  + KES 500 per hoodie
+                </span>
+              </div>
+
+              {enableCustomPrint && (
+                <div className="space-y-3 pt-2 border-t border-[#E8E8E2]">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-neutral-700 mb-1">
+                      Placement on Hoodie:
+                    </label>
+                    <div className="grid grid-cols-3 gap-2 text-xs">
+                      {['Chest Front', 'Upper Back', 'Left Sleeve'].map((pos) => (
+                        <button
+                          key={pos}
+                          type="button"
+                          onClick={() => setCustomPrintPlacement(pos)}
+                          className={`py-1.5 px-2 text-[11px] border rounded-xs font-medium text-center ${
+                            customPrintPlacement === pos
+                              ? 'border-black bg-black text-white'
+                              : 'border-[#D5D5CF] bg-white text-neutral-700'
+                          }`}
+                        >
+                          {pos}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-neutral-700 mb-1">
+                      Text, Monogram, or Brand Tag to print:
+                    </label>
+                    <input
+                      type="text"
+                      value={customPrintText}
+                      onChange={(e) => setCustomPrintText(e.target.value)}
+                      placeholder="e.g. NAIROBI 254 or Your Brand Initials"
+                      className="w-full text-xs p-2.5 border border-[#D5D5CF] bg-white rounded-xs focus:outline-none focus:border-black"
+                    />
+                    <p className="text-[10px] text-neutral-400 mt-1">
+                      High-definition DTF / screen print. Our production team will contact you on WhatsApp / email to confirm design placement.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Availability Status */}
           <div className="flex items-center gap-2 text-xs text-neutral-700">
             <span className="w-2 h-2 rounded-full bg-emerald-600" />
-            <span>In stock · Ships in 1–2 business days</span>
+            <span>In stock in Nairobi · Next-day rider dispatch across Kenya</span>
           </div>
 
           {/* Quantity and Add to Bag Bar */}
@@ -260,7 +352,7 @@ export default function ProductDetailPage({
                 </>
               ) : (
                 <>
-                  Add to bag — ${(product.price * quantity).toFixed(2)}
+                  Add to bag — KES {lineTotal.toLocaleString()}
                 </>
               )}
             </button>
@@ -269,10 +361,13 @@ export default function ProductDetailPage({
           {/* Perks list */}
           <div className="pt-4 border-t border-[#EBEBE8] space-y-2 text-xs text-neutral-600">
             <div className="flex items-center gap-2">
-              <span className="text-black font-medium">✓ Free US shipping on orders $100+</span>
+              <span className="text-black font-medium">✓ Free delivery in Kenya for orders over KES 5,000</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-black font-medium">↺ Easy returns within 30 days</span>
+              <span className="text-black font-medium">✓ Lipa na M-Pesa Buy Goods Till 4466556 or Cash on Delivery</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-black font-medium">↺ Easy 7-day exchanges on unworn items</span>
             </div>
           </div>
 
@@ -345,18 +440,18 @@ export default function ProductDetailPage({
               </table>
             </div>
             <p className="text-[11px] text-neutral-500 italic">
-              Between sizes? Size down for a closer fit, or up for an oversized look.
+              Between sizes? Size down for a closer fit, or up for an oversized streetwear look.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Reviews Banner Section matching design */}
+      {/* Reviews Banner Section */}
       <section className="mt-24 pt-12 border-t border-[#EBEBE8]">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
           <div className="md:col-span-4 space-y-2">
             <span className="text-[10px] font-mono tracking-wider uppercase text-neutral-400">
-              WORN AND LOVED
+              WORN AND LOVED IN NAIROBI
             </span>
             <div className="text-4xl font-extrabold text-neutral-900">{product.rating} / 5</div>
             <div className="flex text-black">
@@ -364,7 +459,7 @@ export default function ProductDetailPage({
                 <Star key={i} size={14} fill="currentColor" />
               ))}
             </div>
-            <p className="text-xs text-neutral-500">Based on {product.review_count} verified reviews</p>
+            <p className="text-xs text-neutral-500">Based on {product.review_count} verified Kenyan buyers</p>
             <p className="text-xs font-semibold text-neutral-800 pt-2">Fit: True to size</p>
           </div>
 
@@ -378,10 +473,10 @@ export default function ProductDetailPage({
               <span className="font-semibold text-black">Verified buyer ✓</span>
             </div>
             <p className="text-base sm:text-lg font-serif italic text-neutral-900 leading-snug">
-              &ldquo;{product.reviews[0]?.comment || 'Finally, a hoodie with the right weight. It holds its shape, and the fit is exactly what I wanted.'}&rdquo;
+              &ldquo;{product.reviews[0]?.comment || 'Best hoodie in Kenya hands down. Thick 460 GSM material keeps me warm in Limuru and Nairobi mornings.'}&rdquo;
             </p>
             <div className="text-xs text-neutral-500 pt-2">
-              {product.reviews[0]?.author || 'Jordan L.'} / {product.reviews[0]?.variant_info || 'Ash M'} / {product.reviews[0]?.date_str || 'October 8, 2026'}
+              {product.reviews[0]?.author || 'Jordan Mwangi'} / {product.reviews[0]?.variant_info || 'Ash M'} / {product.reviews[0]?.date_str || 'October 8, 2026'}
             </div>
           </div>
         </div>

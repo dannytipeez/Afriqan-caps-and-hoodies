@@ -48,9 +48,10 @@ export interface ProductListItem {
   slug: string;
   tagline: string;
   badge: string;
-  price: number;
+  price: number; // in KES
   compare_at_price: number | null;
   in_stock: boolean;
+  supports_custom_print: boolean;
   rating: number;
   review_count: number;
   featured: boolean;
@@ -65,13 +66,14 @@ export interface ProductDetail {
   slug: string;
   tagline: string;
   badge: string;
-  price: number;
+  price: number; // in KES
   compare_at_price: number | null;
   description: string;
   details_and_care: string;
   fabric_weight: string;
   fit_guide: string;
   in_stock: boolean;
+  supports_custom_print: boolean;
   rating: number;
   review_count: number;
   featured: boolean;
@@ -83,16 +85,20 @@ export interface ProductDetail {
 }
 
 export interface CartItem {
-  id: string; // unique combo of slug-color-size
+  id: string; // unique combo of slug-color-size-customprint
   productId: number;
   slug: string;
   name: string;
   color: string;
   size: string;
-  price: number;
+  price: number; // in KES
   quantity: number;
   image: string;
   inStock: boolean;
+  hasCustomPrint?: boolean;
+  customPrintText?: string;
+  customPrintPlacement?: string;
+  customPrintFee?: number; // 500 per unit if applied
 }
 
 export interface OrderItem {
@@ -103,6 +109,10 @@ export interface OrderItem {
   price: number;
   quantity: number;
   image_url: string;
+  has_custom_print: boolean;
+  custom_print_text: string;
+  custom_print_placement: string;
+  custom_print_fee: number;
 }
 
 export interface Order {
@@ -125,7 +135,9 @@ export interface Order {
   total: number;
   currency: string;
   payment_method: string;
-  card_last_four: string;
+  payment_status: string;
+  mpesa_phone: string;
+  mpesa_receipt_number: string;
   status: string;
   status_display: string;
   order_note: string;
@@ -133,4 +145,3 @@ export interface Order {
   created_at: string;
   items: OrderItem[];
 }
-

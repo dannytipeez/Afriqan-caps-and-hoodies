@@ -25,40 +25,46 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [orderNote, setOrderNote] = useState<string>('');
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Initialize from localStorage or sample mock items matching the Offhours checkout designs
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('afriqan_cart');
+      const saved = localStorage.getItem('afriqan_cart_kes');
       if (saved) {
         setItems(JSON.parse(saved));
       } else {
-        // Default cart with 2 essentials as pictured in the user's mock:
-        // 1. The Heavyweight Hoodie ($88)
-        // 2. The Afriqan Signature Cap ($38) -> Subtotal $126
+        // Initial sample items in KES:
+        // 1. The Heavyweight Hoodie (KES 3,500) + Custom Print (KES 500)
+        // 2. The Afriqan Signature Cap (KES 1,500)
+        // Subtotal = 3500 + 500 + 1500 = KES 5,500 -> Free delivery in Nairobi / Kenya (> KES 5,000)
         const initialCart: CartItem[] = [
           {
-            id: 'the-heavyweight-hoodie-ash-Ash-M',
+            id: 'the-heavyweight-hoodie-ash-Ash-M-print',
             productId: 1,
             slug: 'the-heavyweight-hoodie-ash',
             name: 'The Heavyweight Hoodie',
             color: 'Ash',
             size: 'M',
-            price: 88.0,
+            price: 3500.0,
             quantity: 1,
             image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=1200&q=80',
             inStock: true,
+            hasCustomPrint: true,
+            customPrintText: 'NAIROBI ROTATION 254',
+            customPrintPlacement: 'Upper Back (+KES 500)',
+            customPrintFee: 500.0,
           },
           {
-            id: 'the-afriqan-signature-cap-Ink-ONE SIZE',
+            id: 'the-afriqan-signature-cap-Ink-ONE SIZE-plain',
             productId: 2,
             slug: 'the-afriqan-signature-cap',
             name: 'The Afriqan Signature Cap',
             color: 'Ink',
             size: 'ONE SIZE',
-            price: 38.0,
+            price: 1500.0,
             quantity: 1,
             image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=1200&q=80',
             inStock: true,
+            hasCustomPrint: false,
+            customPrintFee: 0,
           },
         ];
         setItems(initialCart);
@@ -71,12 +77,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem('afriqan_cart', JSON.stringify(items));
+      localStorage.setItem('afriqan_cart_kes', JSON.stringify(items));
     }
   }, [items, isLoaded]);
 
   const addToCart = (newItem: Omit<CartItem, 'id'>) => {
-    const itemId = `${newItem.slug}-${newItem.color}-${newItem.size}`;
+    const printKey = newItem.hasCustomPrint
+      ? `print-${newItem.customPrintPlacement}-${newItem.customPrintText}`
+      : 'plain';
+    const itemId = `${newItem.slug}-${newItem.color}-${newItem.size}-${printKey}`;
+
     setItems((prev) => {
       const existing = prev.find((item) => item.id === itemId);
       if (existing) {
@@ -113,9 +123,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = subtotal >= 100 || subtotal === 0 ? 0.0 : 12.0; // Free shipping over $100
-  const tax = Number((subtotal * 0.08).toFixed(2)); // ~8% tax
+  const subtotal = items.reduce(
+    (sum, item) => sum + (item.price + (item.hasCustomPrint ? item.customPrintFee || 500 : 0)) * item.quantity,
+    0
+  );
+  // Free shipping in Kenya for orders >= KES 5,000; otherwise flat KES 300
+  const shipping = subtotal >= 5000 || subtotal === 0 ? 0.0 : 300.0;
+  const tax = 0.0; // In Kenya, VAT is inclusive in retail prices
   const total = Number((subtotal + shipping + tax).toFixed(2));
 
   return (
@@ -147,4 +161,3 @@ export function useCart() {
   }
   return context;
 }
-

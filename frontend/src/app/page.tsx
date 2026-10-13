@@ -80,11 +80,11 @@ export default function ShopAllPage() {
             The daily rotation.
           </h1>
           <p className="text-sm text-neutral-500 mt-2 font-medium">
-            Considered essentials. Nothing more, nothing less.
+            Kenyan luxury streetwear essentials. Heavyweight cotton hoodies with custom printing add-on (+KES 500) &amp; caps.
           </p>
         </div>
         <div className="text-[11px] font-mono tracking-widest uppercase text-neutral-400">
-          CORE COLLECTION / VOL. 01
+          CORE COLLECTION / VOL. 01 · NAIROBI
         </div>
       </div>
 
@@ -112,7 +112,7 @@ export default function ShopAllPage() {
         })}
       </div>
 
-      {/* Main Grid with Left Sidebar Filters matching offhours screenshot */}
+      {/* Main Grid with Left Sidebar Filters */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
         {/* Left Sidebar Filters */}
         <aside className="lg:col-span-1 space-y-8 pr-4">
@@ -199,27 +199,27 @@ export default function ShopAllPage() {
             </div>
           </div>
 
-          {/* Price Range Filter */}
+          {/* Price Range Filter in KES */}
           <div className="space-y-3">
             <h3 className="text-xs font-semibold text-neutral-800 uppercase tracking-wide">Price</h3>
             <div className="space-y-2 text-xs">
               <label className="flex items-center gap-2 cursor-pointer text-neutral-700 hover:text-black">
                 <input
                   type="checkbox"
-                  checked={priceRange === 'under_50'}
-                  onChange={() => setPriceRange(priceRange === 'under_50' ? '' : 'under_50')}
+                  checked={priceRange === 'under_2500'}
+                  onChange={() => setPriceRange(priceRange === 'under_2500' ? '' : 'under_2500')}
                   className="rounded-xs border-neutral-300 text-black focus:ring-0"
                 />
-                <span>Under $50 (3)</span>
+                <span>Under KES 2,500 (3)</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer text-neutral-700 hover:text-black">
                 <input
                   type="checkbox"
-                  checked={priceRange === '50_100'}
-                  onChange={() => setPriceRange(priceRange === '50_100' ? '' : '50_100')}
+                  checked={priceRange === '2500_4000'}
+                  onChange={() => setPriceRange(priceRange === '2500_4000' ? '' : '2500_4000')}
                   className="rounded-xs border-neutral-300 text-black focus:ring-0"
                 />
-                <span>$50 – $100 (3)</span>
+                <span>KES 2,500 – KES 4,000 (3)</span>
               </label>
             </div>
           </div>
@@ -242,7 +242,7 @@ export default function ShopAllPage() {
           <div className="p-4 bg-[#F2F2EE] border border-[#E6E6E1] rounded-xs space-y-2">
             <h4 className="text-xs font-bold text-neutral-900">Find your fit.</h4>
             <p className="text-xs text-neutral-600 leading-relaxed">
-              Unisex sizing. Relaxed by design. Built to drape cleanly.
+              Unisex sizing. Relaxed Nairobi streetwear drape. Add custom print (+KES 500) on any plain hoodie.
             </p>
             <Link
               href="#"
@@ -258,7 +258,7 @@ export default function ShopAllPage() {
           {/* Top meta bar */}
           <div className="flex items-center justify-between pb-4 mb-6 border-b border-[#EBEBE8] text-xs text-neutral-500">
             <div>
-              <span>{products.length} essentials</span>
+              <span>{products.length} essentials in Kenya</span>
             </div>
             <div className="flex items-center gap-2">
               <label htmlFor="sort-select" className="text-neutral-500">Sort by:</label>
@@ -302,7 +302,7 @@ export default function ShopAllPage() {
           {/* End of catalog banner */}
           <div className="mt-20 pt-10 border-t border-[#EBEBE8] text-center space-y-2">
             <p className="text-xs text-neutral-400">You’ve seen all {products.length} essentials.</p>
-            <p className="text-sm font-serif italic text-neutral-700">Less, but better.</p>
+            <p className="text-sm font-serif italic text-neutral-700">Less noise. Better Kenyan essentials.</p>
           </div>
         </section>
       </div>
