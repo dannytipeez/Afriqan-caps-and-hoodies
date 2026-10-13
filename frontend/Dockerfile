@@ -1,19 +1,19 @@
-# 1. Base Image
+# Multi-stage production build for Next.js
 FROM node:20-alpine AS base
 WORKDIR /app
 RUN apk add --no-cache libc6-compat
 
-# 2. Dependencies
+# Dependencies
 FROM base AS deps
 WORKDIR /app
-COPY frontend/package.json frontend/package-lock.json* ./
+COPY package.json package-lock.json* ./
 RUN npm ci
 
-# 3. Builder
+# Builder
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY frontend ./
+COPY . ./
 
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
@@ -21,7 +21,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build
 
-# 4. Runner
+# Runner
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
@@ -40,4 +40,3 @@ USER nextjs
 EXPOSE 3000
 
 CMD ["node", "server.js"]
-

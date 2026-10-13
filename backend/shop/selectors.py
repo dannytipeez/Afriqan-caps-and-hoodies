@@ -69,3 +69,4 @@ def order_get_by_number(*, order_number: str) -> Optional[Order]:
         return Order.objects.prefetch_related("items").get(order_number=order_number)
     except Order.DoesNotExist:
         return None
+

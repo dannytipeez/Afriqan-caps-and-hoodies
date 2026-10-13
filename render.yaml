@@ -3,8 +3,8 @@ services:
   - type: web
     name: afriqan-backend
     runtime: docker
-    dockerfilePath: backend/Dockerfile
-    dockerContext: .
+    dockerfilePath: Dockerfile
+    dockerContext: backend
     plan: starter
     region: oregon
     healthCheckPath: /api/shop/products
@@ -24,8 +24,8 @@ services:
   - type: web
     name: afriqan-frontend
     runtime: docker
-    dockerfilePath: frontend/Dockerfile
-    dockerContext: .
+    dockerfilePath: Dockerfile
+    dockerContext: frontend
     plan: starter
     region: oregon
     healthCheckPath: /
@@ -46,4 +46,3 @@ databases:
     region: oregon
     databaseName: afriqan_db
     user: afriqan_user
-
