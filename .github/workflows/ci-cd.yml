@@ -72,8 +72,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to Render Blueprint
+      - name: Trigger Render Deploy Hook (Frontend)
+        if: env.RENDER_FRONTEND_DEPLOY_HOOK != ''
+        env:
+          RENDER_FRONTEND_DEPLOY_HOOK: ${{ secrets.RENDER_FRONTEND_DEPLOY_HOOK }}
         run: |
-          echo "Automated Render GitHub integration syncs on push to main branch."
-          echo "If Render Deploy Hooks are configured in Secrets, trigger them here."
+          curl -X POST "$RENDER_FRONTEND_DEPLOY_HOOK"
 
+      - name: Trigger Render Deploy Hook (Backend)
+        if: env.RENDER_BACKEND_DEPLOY_HOOK != ''
+        env:
+          RENDER_BACKEND_DEPLOY_HOOK: ${{ secrets.RENDER_BACKEND_DEPLOY_HOOK }}
+        run: |
+          curl -X POST "$RENDER_BACKEND_DEPLOY_HOOK"
+
+      - name: Confirm Render Auto-Sync
+        run: |
+          echo "Render Git integration automatically detects pushes to main branch."
+          echo "Services connected to dannytipeez/Afriqan-caps-and-hoodies branch main deploy continuously."
