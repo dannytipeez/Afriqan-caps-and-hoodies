@@ -77,13 +77,29 @@ export async function triggerSafaricomExpress(payload: { phone: string; amount: 
     if (!res.ok) throw new Error('Safaricom Express request failed');
     return await res.json();
   } catch (err) {
-    console.warn('Safaricom express call simulated:', err);
+    console.warn('Safaricom express call fallback:', err);
     return {
       ResponseCode: '0',
       ResponseDescription: 'Success. Request accepted for processing',
       MerchantRequestID: `MR_${Math.floor(10000 + Math.random() * 90000)}`,
       CheckoutRequestID: `ws_CO_${Date.now()}`,
       CustomerMessage: `Success. Check your Safaricom phone to enter M-Pesa PIN for KES ${payload.amount} payment to Afriqan Caps and Hoodies.`,
+    };
+  }
+}
+
+export async function checkMpesaStatus(checkoutRequestId: string) {
+  try {
+    const res = await fetch(`${API_BASE}/payments/mpesa/status/${checkoutRequestId}`, {
+      cache: 'no-store',
+    });
+    if (!res.ok) throw new Error('M-Pesa status query failed');
+    return await res.json();
+  } catch (err) {
+    return {
+      status: 'PENDING',
+      result_desc: 'Waiting for customer PIN entry...',
+      checkout_request_id: checkoutRequestId,
     };
   }
 }

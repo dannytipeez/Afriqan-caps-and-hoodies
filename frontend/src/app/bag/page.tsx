@@ -43,19 +43,19 @@ export default function BagPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       {/* Top Banner if qualified for free delivery in Kenya */}
       {subtotal >= 5000 && (
-        <div className="bg-[#E9F3A1]/60 dark:bg-[#202715] border border-[#D5E473] dark:border-[#38421F] text-black dark:text-[#D2DB6B] px-4 py-2.5 rounded-xs text-xs font-medium mb-8 flex items-center justify-between">
-          <span>You&apos;ve unlocked free shipping. Your essentials are ready for a new home.</span>
+        <div className="bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-purple-950 dark:text-purple-200 px-4 py-2.5 rounded-xl text-xs font-semibold mb-8 flex items-center justify-between">
+          <span>You&apos;ve unlocked free shipping! Your Kenyan streetwear essentials are ready for dispatch.</span>
         </div>
       )}
 
       {/* Title Bar */}
-      <div className="flex items-center justify-between border-b border-[#EBEBE8] dark:border-[#27282B] pb-6 mb-8">
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
-          Your bag.
+      <div className="flex items-center justify-between border-b border-[#E9E5F5] dark:border-[#2A2344] pb-6 mb-8">
+        <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-[#0F0E17] dark:text-[#FAF8FF]">
+          Your Shopping Bag
         </h1>
         <Link
           href="/shop"
-          className="text-xs font-semibold text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
+          className="text-xs font-bold text-purple-700 dark:text-purple-300 hover:text-purple-900 dark:hover:text-white transition-colors"
         >
           ← Continue shopping
         </Link>
@@ -223,12 +223,12 @@ export default function BagPage() {
                 <p className="text-xs text-emerald-600 font-medium">Code applied.</p>
               )}
 
-              {/* Checkout CTA in signature Citron */}
+              {/* Checkout CTA in royal purple */}
               <Link
                 href="/checkout"
-                className="w-full bg-[#D2DB6B] hover:bg-[#C2CB5E] text-black font-bold text-xs uppercase tracking-wider py-4 rounded-xs transition-colors flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99]"
+                className="w-full bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold text-xs uppercase tracking-wider py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer active:scale-[0.99]"
               >
-                <span>Checkout</span>
+                <span>Proceed to Checkout</span>
                 <ArrowRight size={16} />
               </Link>
 

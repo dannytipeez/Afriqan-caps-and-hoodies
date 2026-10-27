@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Lock, Smartphone, Banknote, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
-import { createOrder, triggerSafaricomExpress } from '@/lib/api';
+import { createOrder, triggerSafaricomExpress, checkMpesaStatus } from '@/lib/api';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -27,7 +27,11 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<'mpesa_till' | 'mpesa_express' | 'cod'>('mpesa_till');
   const [mpesaReceipt, setMpesaReceipt] = useState('');
   const [stkPhoneNumber, setStkPhoneNumber] = useState('0712345678');
-  const [stkStatus, setStkStatus] = useState<{ status: 'idle' | 'sending' | 'prompt_sent' | 'error'; message: string }>({
+  const [stkStatus, setStkStatus] = useState<{
+    status: 'idle' | 'sending' | 'prompt_sent' | 'paid' | 'error';
+    message: string;
+    checkoutId?: string;
+  }>({
     status: 'idle',
     message: '',
   });
@@ -37,6 +41,44 @@ export default function CheckoutPage() {
   const selectedShippingCost = shippingMethod === 'standard' ? shipping : 450.0;
   const currentTotal = Number((subtotal + selectedShippingCost).toFixed(2));
 
+  // Auto-polling for M-Pesa STK push completion
+  React.useEffect(() => {
+    if (stkStatus.status !== 'prompt_sent' || !stkStatus.checkoutId) return;
+
+    let attempts = 0;
+    const maxAttempts = 12; // 12 * 3s = 36s timeout
+    const interval = setInterval(async () => {
+      attempts += 1;
+      try {
+        const res = await checkMpesaStatus(stkStatus.checkoutId!);
+        if (res.status === 'COMPLETED' && res.mpesa_receipt) {
+          setMpesaReceipt(res.mpesa_receipt);
+          setStkStatus({
+            status: 'paid',
+            message: `M-Pesa payment received! Receipt: ${res.mpesa_receipt}`,
+          });
+          clearInterval(interval);
+        } else if (res.status === 'FAILED') {
+          setStkStatus({
+            status: 'error',
+            message: res.result_desc || 'Payment was cancelled or timed out on your phone.',
+          });
+          clearInterval(interval);
+        } else if (attempts >= maxAttempts) {
+          setStkStatus({
+            status: 'prompt_sent',
+            message: 'Waiting period completed. If you already entered your PIN, you can enter the confirmation code manually.',
+          });
+          clearInterval(interval);
+        }
+      } catch (e) {
+        console.warn('Status poll attempt failed', e);
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [stkStatus.status, stkStatus.checkoutId]);
+
   const handleSafaricomSTKPush = async () => {
     if (!stkPhoneNumber) {
       alert('Please enter your Safaricom phone number for M-Pesa STK push.');
@@ -44,19 +86,21 @@ export default function CheckoutPage() {
     }
     setStkStatus({ status: 'sending', message: 'Initiating Safaricom Express STK push...' });
     try {
+      const orderRef = `AF-${Math.floor(10000 + Math.random() * 90000)}`;
       const res = await triggerSafaricomExpress({
         phone: stkPhoneNumber,
         amount: Math.round(currentTotal),
-        order_number: `AF-${Math.floor(10000 + Math.random() * 90000)}`,
+        order_number: orderRef,
       });
       setStkStatus({
         status: 'prompt_sent',
         message: res.CustomerMessage || 'STK Push sent to your phone! Enter your M-Pesa PIN.',
+        checkoutId: res.CheckoutRequestID,
       });
     } catch (err: any) {
       setStkStatus({
         status: 'error',
-        message: 'Could not send STK push. Pay via Buy Goods Till 4466556 below.',
+        message: 'Could not send STK push. You can pay via Buy Goods Till 4466556 below.',
       });
     }
   };
@@ -321,10 +365,10 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setPaymentMethod('mpesa_till')}
-                  className={`py-2.5 px-3 text-xs font-bold rounded-xs border text-center transition-all ${
+                  className={`py-3 px-3 text-xs font-bold rounded-xl border text-center transition-all cursor-pointer ${
                     paymentMethod === 'mpesa_till'
-                      ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
-                      : 'border-[#D5D5CF] dark:border-[#27282B] bg-white dark:bg-[#161718] text-neutral-700 dark:text-neutral-300'
+                      ? 'border-[#7C3AED] bg-[#7C3AED] text-white shadow-sm'
+                      : 'border-[#E9E5F5] dark:border-[#2A2344] bg-white dark:bg-[#161718] text-[#0F0E17] dark:text-[#FAF8FF]'
                   }`}
                 >
                   Buy Goods Till
@@ -332,10 +376,10 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setPaymentMethod('mpesa_express')}
-                  className={`py-2.5 px-3 text-xs font-bold rounded-xs border text-center transition-all ${
+                  className={`py-3 px-3 text-xs font-bold rounded-xl border text-center transition-all cursor-pointer ${
                     paymentMethod === 'mpesa_express'
-                      ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
-                      : 'border-[#D5D5CF] dark:border-[#27282B] bg-white dark:bg-[#161718] text-neutral-700 dark:text-neutral-300'
+                      ? 'border-[#7C3AED] bg-[#7C3AED] text-white shadow-sm'
+                      : 'border-[#E9E5F5] dark:border-[#2A2344] bg-white dark:bg-[#161718] text-[#0F0E17] dark:text-[#FAF8FF]'
                   }`}
                 >
                   Safaricom STK
@@ -343,10 +387,10 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setPaymentMethod('cod')}
-                  className={`py-2.5 px-3 text-xs font-bold rounded-xs border text-center transition-all ${
+                  className={`py-3 px-3 text-xs font-bold rounded-xl border text-center transition-all cursor-pointer ${
                     paymentMethod === 'cod'
-                      ? 'border-black dark:border-white bg-black dark:bg-white text-white dark:text-black'
-                      : 'border-[#D5D5CF] dark:border-[#27282B] bg-white dark:bg-[#161718] text-neutral-700 dark:text-neutral-300'
+                      ? 'border-[#7C3AED] bg-[#7C3AED] text-white shadow-sm'
+                      : 'border-[#E9E5F5] dark:border-[#2A2344] bg-white dark:bg-[#161718] text-[#0F0E17] dark:text-[#FAF8FF]'
                   }`}
                 >
                   Cash on Delivery
@@ -355,8 +399,8 @@ export default function CheckoutPage() {
 
               {/* Till 4466556 View */}
               {paymentMethod === 'mpesa_till' && (
-                <div className="p-4 bg-white dark:bg-[#161718] border border-[#D5D5CF] dark:border-[#27282B] rounded-xs space-y-4">
-                  <div className="relative w-full aspect-[2.3/1] max-w-md mx-auto overflow-hidden rounded-xs border border-neutral-200">
+                <div className="p-5 bg-white dark:bg-[#141124] border border-[#E9E5F5] dark:border-[#2A2344] rounded-2xl space-y-4 shadow-xs">
+                  <div className="relative w-full aspect-[2.3/1] max-w-md mx-auto overflow-hidden rounded-xl border border-purple-200 dark:border-purple-900/60 shadow-sm">
                     <Image
                       src="/lipa-na-mpesa-till.png"
                       alt="Lipa Na M-Pesa Buy Goods Till Number 4466556"
@@ -366,22 +410,22 @@ export default function CheckoutPage() {
                     />
                   </div>
 
-                  <div className="text-xs text-neutral-600 dark:text-neutral-400 space-y-1">
+                  <div className="text-xs text-[#5B586E] dark:text-[#B6B0D1] space-y-1.5 bg-purple-50/50 dark:bg-purple-950/30 p-3 rounded-xl border border-purple-100 dark:border-purple-900/40">
                     <p>1. Go to M-Pesa → Buy Goods and Services</p>
-                    <p>2. Enter Till Number: <strong className="font-mono text-black dark:text-white">4466556</strong></p>
-                    <p>3. Amount: <strong className="text-black dark:text-white font-mono">KES {currentTotal.toLocaleString()}</strong></p>
+                    <p>2. Enter Till Number: <strong className="font-mono text-purple-900 dark:text-purple-200 text-sm">4466556</strong> (AFRIQAN TEES AND CAPS HUB)</p>
+                    <p>3. Enter Amount: <strong className="text-purple-900 dark:text-purple-200 font-mono text-sm">KES {currentTotal.toLocaleString()}</strong></p>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                      M-Pesa confirmation code:
+                    <label className="block text-xs font-bold text-[#0F0E17] dark:text-[#FAF8FF] mb-1">
+                      M-Pesa confirmation code (from Safaricom SMS):
                     </label>
                     <input
                       type="text"
                       value={mpesaReceipt}
                       onChange={(e) => setMpesaReceipt(e.target.value.toUpperCase())}
-                      placeholder="e.g. SGK8291KL0"
-                      className="w-full text-xs p-3 border border-[#D5D5CF] dark:border-[#27282B] rounded-xs bg-white dark:bg-[#161718] uppercase font-mono font-bold"
+                      placeholder="e.g. NL48291072 or SGK8291KL0"
+                      className="w-full text-xs p-3.5 border border-[#E9E5F5] dark:border-[#2A2344] rounded-xl bg-white dark:bg-[#161718] uppercase font-mono font-black text-purple-900 dark:text-purple-200 tracking-wider focus:outline-none focus:ring-2 focus:ring-[#7C3AED]"
                     />
                   </div>
                 </div>
@@ -389,9 +433,9 @@ export default function CheckoutPage() {
 
               {/* Safaricom Express STK */}
               {paymentMethod === 'mpesa_express' && (
-                <div className="p-4 bg-white dark:bg-[#161718] border border-[#D5D5CF] dark:border-[#27282B] rounded-xs space-y-3">
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                    Enter Safaricom number to trigger an instant M-Pesa PIN prompt for <strong>KES {currentTotal.toLocaleString()}</strong>:
+                <div className="p-5 bg-white dark:bg-[#141124] border border-[#E9E5F5] dark:border-[#2A2344] rounded-2xl space-y-4 shadow-xs">
+                  <p className="text-xs text-[#5B586E] dark:text-[#B6B0D1]">
+                    Enter your Safaricom number to trigger an instant M-Pesa PIN prompt for <strong className="text-purple-900 dark:text-purple-200">KES {currentTotal.toLocaleString()}</strong>:
                   </p>
                   <div className="flex gap-2">
                     <input
@@ -399,27 +443,46 @@ export default function CheckoutPage() {
                       value={stkPhoneNumber}
                       onChange={(e) => setStkPhoneNumber(e.target.value)}
                       placeholder="0712345678"
-                      className="flex-grow text-xs p-3 border border-[#D5D5CF] dark:border-[#27282B] rounded-xs bg-white dark:bg-[#161718] font-mono font-semibold"
+                      className="flex-grow text-xs p-3.5 border border-[#E9E5F5] dark:border-[#2A2344] rounded-xl bg-white dark:bg-[#161718] font-mono font-bold text-[#0F0E17] dark:text-[#FAF8FF] focus:outline-none focus:ring-2 focus:ring-[#7C3AED]"
                     />
                     <button
                       type="button"
                       onClick={handleSafaricomSTKPush}
                       disabled={stkStatus.status === 'sending'}
-                      className="bg-black dark:bg-white text-white dark:text-black text-xs font-bold px-4 py-3 rounded-xs uppercase tracking-wider"
+                      className="bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-xs font-bold px-5 py-3 rounded-xl uppercase tracking-wider transition-all cursor-pointer shadow-sm disabled:opacity-50"
                     >
                       {stkStatus.status === 'sending' ? 'Sending...' : 'Send STK'}
                     </button>
                   </div>
-                  {stkStatus.message && (
-                    <p className="text-xs text-emerald-600">{stkStatus.message}</p>
+
+                  {/* Dynamic Status Feedback */}
+                  {stkStatus.status === 'prompt_sent' && (
+                    <div className="p-3.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-xs text-purple-900 dark:text-purple-200 flex items-center gap-2.5">
+                      <div className="w-4 h-4 border-2 border-purple-600 border-t-transparent rounded-full animate-spin shrink-0" />
+                      <span>{stkStatus.message}</span>
+                    </div>
+                  )}
+
+                  {stkStatus.status === 'paid' && (
+                    <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-900 dark:text-emerald-200 flex items-center gap-2.5">
+                      <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
+                      <span className="font-semibold">{stkStatus.message}</span>
+                    </div>
+                  )}
+
+                  {stkStatus.status === 'error' && (
+                    <div className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-xs text-red-900 dark:text-red-200 flex items-center gap-2.5">
+                      <AlertCircle size={16} className="text-red-600 shrink-0" />
+                      <span>{stkStatus.message}</span>
+                    </div>
                   )}
                 </div>
               )}
 
               {/* COD */}
               {paymentMethod === 'cod' && (
-                <div className="p-4 bg-[#F8F8F5] dark:bg-[#161718] border border-[#EBEBE8] dark:border-[#27282B] rounded-xs text-xs text-neutral-600 dark:text-neutral-400">
-                  Pay cash or via rider M-Pesa upon doorstep parcel arrival.
+                <div className="p-4 bg-purple-50/50 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-900/40 rounded-xl text-xs text-[#5B586E] dark:text-[#B6B0D1]">
+                  Pay cash or via rider M-Pesa upon doorstep parcel delivery in Nairobi or across Kenya.
                 </div>
               )}
 
@@ -427,15 +490,15 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full mt-6 bg-[#D2DB6B] hover:bg-[#C2CB5E] text-black font-bold text-xs uppercase tracking-wider py-4 rounded-xs transition-colors flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99] disabled:opacity-50"
+                className="w-full mt-6 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold text-xs uppercase tracking-wider py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer active:scale-[0.99] disabled:opacity-50"
               >
                 <Lock size={14} />
                 <span>
                   {isSubmitting
-                    ? 'Processing...'
+                    ? 'Processing Order...'
                     : paymentMethod === 'cod'
                     ? `Confirm Order (Pay KES ${currentTotal.toLocaleString()} on Delivery)`
-                    : `Pay KES ${currentTotal.toLocaleString()}`}
+                    : `Confirm & Pay KES ${currentTotal.toLocaleString()}`}
                 </span>
               </button>
 

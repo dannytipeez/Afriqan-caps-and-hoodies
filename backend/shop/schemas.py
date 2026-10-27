@@ -175,3 +175,13 @@ class SafaricomExpressOut(Schema):
     MerchantRequestID: str
     CheckoutRequestID: str
     CustomerMessage: str
+
+
+class MpesaStatusOut(Schema):
+    status: str  # PENDING, COMPLETED, FAILED
+    result_desc: Optional[str] = ""
+    checkout_request_id: Optional[str] = None
+    mpesa_receipt: Optional[str] = None
+    amount: Optional[float] = None
+    phone: Optional[str] = None
+

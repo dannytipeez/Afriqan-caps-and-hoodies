@@ -19,6 +19,26 @@ services:
         fromDatabase:
           name: afriqan-postgres
           property: connectionString
+      - key: MPESA_ENVIRONMENT
+        value: "production"
+      - key: MPESA_CONSUMER_KEY
+        value: "NbAHKYCDTxr29yIxWyRjHLbGBD21JLHlE3AHqzS3umr0egYc"
+      - key: MPESA_CONSUMER_SECRET
+        value: "Gy5Rp08dwx7l43SzahIhLADvziYw1sDyR5nSYrLeVCdK5FIqMlHETQ2raDi6pK84"
+      - key: MPESA_PASSKEY
+        value: "ea8dad6511bed9c3aebbbd73689fc66ec4ed156f2a0d3aa15794658c9f62377d"
+      - key: MPESA_SHORTCODE
+        value: "5008412"
+      - key: MPESA_TILL_NUMBER
+        value: "4466556"
+      - key: MPESA_TRANSACTION_TYPE
+        value: "CustomerBuyGoodsOnline"
+      - key: MPESA_CALLBACK_URL
+        fromService:
+          type: web
+          name: afriqan-backend
+          envVarKey: RENDER_EXTERNAL_URL
+          transformation: "${RENDER_EXTERNAL_URL}/api/shop/payments/mpesa/callback"
 
   # Frontend: Next.js
   - type: web

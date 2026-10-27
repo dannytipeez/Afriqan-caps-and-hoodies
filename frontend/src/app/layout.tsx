@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
+import { FavoritesProvider } from "@/context/FavoritesContext";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://afriqan-caps-and-hoodies.onrender.com"),
@@ -132,12 +133,14 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#FBFBF9] text-[#121212] selection:bg-[#D2DB6B] selection:text-black">
-        <CartProvider>
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </CartProvider>
+      <body className="min-h-screen flex flex-col bg-[#FAF8FF] dark:bg-[#0C0A14] text-[#0F0E17] dark:text-[#FAF8FF] selection:bg-purple-200 selection:text-purple-900">
+        <FavoritesProvider>
+          <CartProvider>
+            <Header />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </CartProvider>
+        </FavoritesProvider>
       </body>
     </html>
   );

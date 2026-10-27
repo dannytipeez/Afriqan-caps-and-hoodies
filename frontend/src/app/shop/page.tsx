@@ -100,10 +100,10 @@ export default function ShopAllPage() {
                   setActiveCategory(cat.value);
                 });
               }}
-              className={`text-xs px-4 py-2 rounded-full font-medium transition-colors whitespace-nowrap cursor-pointer ${
+              className={`text-xs px-4 py-2 rounded-full font-bold transition-all whitespace-nowrap cursor-pointer ${
                 isActive
-                  ? 'bg-black text-white dark:bg-white dark:text-black'
-                  : 'bg-[#EFEFEA] dark:bg-[#1E1F21] text-neutral-700 dark:text-neutral-300 hover:bg-[#E4E4DF] dark:hover:bg-[#27282B]'
+                  ? 'bg-[#7C3AED] text-white shadow-sm'
+                  : 'bg-purple-50 dark:bg-purple-950/40 text-purple-900 dark:text-purple-200 hover:bg-purple-100 dark:hover:bg-purple-900/40'
               }`}
             >
               {cat.label}
@@ -161,10 +161,10 @@ export default function ShopAllPage() {
                   <button
                     key={sz}
                     onClick={() => setSelectedSize(isSelected ? '' : sz)}
-                    className={`py-2 text-xs font-medium border text-center transition-all ${
+                    className={`py-2 text-xs font-bold rounded-lg border text-center transition-all cursor-pointer ${
                       isSelected
-                        ? 'border-black bg-black text-white dark:border-white dark:bg-white dark:text-black'
-                        : 'border-[#E0E0DC] dark:border-[#27282B] bg-white dark:bg-[#161718] text-neutral-700 dark:text-neutral-300 hover:border-black'
+                        ? 'border-[#7C3AED] bg-[#7C3AED] text-white shadow-xs'
+                        : 'border-[#E0E0DC] dark:border-[#27282B] bg-white dark:bg-[#161718] text-[#0F0E17] dark:text-[#FAF8FF] hover:border-[#7C3AED]'
                     }`}
                   >
                     {sz}

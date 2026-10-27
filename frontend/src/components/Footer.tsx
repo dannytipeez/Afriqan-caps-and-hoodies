@@ -5,14 +5,14 @@ import { ArrowUpRight } from 'lucide-react';
 export default function Footer() {
   return (
     <footer className="mt-24 border-t border-[#EBEBE8] bg-[#FBFBF9]">
-      {/* Top Value Proposition Bar in Citron Yellow */}
-      <div className="bg-[#D2DB6B] text-black py-4 px-4 sm:px-8 border-b border-[#C2CB5E]">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs sm:text-sm font-medium gap-3">
+      {/* Top Value Proposition Bar in Royal Purple */}
+      <div className="bg-[#7C3AED] text-white py-4 px-4 sm:px-8 border-b border-[#6D28D9] shadow-sm">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs sm:text-sm font-semibold gap-3">
           <div>Free Kenya delivery on orders KES 5,000+</div>
-          <div>Lipa na M-Pesa Buy Goods &amp; Cash on Delivery</div>
+          <div>Lipa na M-Pesa Buy Goods Till 4466556 &amp; Cash on Delivery</div>
           <a
             href="mailto:orders@afriqan.co.ke"
-            className="flex items-center gap-1 hover:underline font-semibold"
+            className="flex items-center gap-1 hover:underline font-bold text-purple-100"
           >
             Need help? Contact our Nairobi hub <ArrowUpRight size={14} />
           </a>

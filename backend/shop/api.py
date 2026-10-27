@@ -7,7 +7,12 @@ from ninja import Router
 from django.http import Http404
 
 from shop.selectors import category_list, product_list, product_get_by_slug, order_get_by_number
-from shop.services import order_create, safaricom_express_stk_push
+from shop.services import (
+    order_create,
+    safaricom_express_stk_push,
+    mpesa_query_status,
+    mpesa_handle_callback,
+)
 from shop.schemas import (
     CategoryOut,
     ProductListOut,
@@ -16,6 +21,7 @@ from shop.schemas import (
     OrderOut,
     SafaricomExpressIn,
     SafaricomExpressOut,
+    MpesaStatusOut,
 )
 
 router = Router()
@@ -193,14 +199,41 @@ def get_order_by_number(request, order_number: str):
 
 
 @router.post("/payments/safaricom-express", response=SafaricomExpressOut)
+@router.post("/payments/mpesa/stk-push", response=SafaricomExpressOut)
 def trigger_safaricom_express(request, payload: SafaricomExpressIn):
     """Initiates Safaricom Daraja STK Push directly to customer mobile phone."""
     res = safaricom_express_stk_push(
         phone=payload.phone,
         amount=payload.amount,
-        account_reference=payload.order_number,
+        order_number=payload.order_number,
     )
     return res
+
+
+@router.get("/payments/mpesa/status/{checkout_request_id}", response=MpesaStatusOut)
+def check_mpesa_payment_status(request, checkout_request_id: str):
+    """Queries M-Pesa STK status from Daraja API / database."""
+    res = mpesa_query_status(checkout_request_id=checkout_request_id)
+    return {
+        "status": res.get("status", "PENDING"),
+        "result_desc": res.get("result_desc", ""),
+        "checkout_request_id": res.get("checkout_request_id", checkout_request_id),
+        "mpesa_receipt": res.get("mpesa_receipt"),
+        "amount": res.get("amount"),
+        "phone": res.get("phone"),
+    }
+
+
+@router.post("/payments/mpesa/callback")
+def receive_mpesa_callback(request):
+    """Receives asynchronous callback from Safaricom Daraja Gateway."""
+    import json
+    try:
+        data = json.loads(request.body)
+    except Exception:
+        data = {}
+    return mpesa_handle_callback(data)
+
 
 
 def _format_order_response(order) -> dict:

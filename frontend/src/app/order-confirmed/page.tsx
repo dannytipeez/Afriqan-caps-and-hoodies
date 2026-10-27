@@ -100,7 +100,7 @@ function OrderConfirmedContent() {
       {/* Top Confirmed Greeting */}
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#D2DB6B] flex items-center justify-center text-black">
+          <div className="w-10 h-10 rounded-full bg-[#7C3AED] flex items-center justify-center text-white shadow-sm">
             <Check size={20} strokeWidth={2.5} />
           </div>
           <div>
@@ -306,7 +306,7 @@ function OrderConfirmedContent() {
       <div className="text-center pt-8">
         <Link
           href="/"
-          className="inline-flex items-center justify-center gap-2 bg-[#D2DB6B] hover:bg-[#C2CB5E] text-black font-bold text-xs uppercase tracking-wider py-4 px-10 rounded-xs transition-colors shadow-xs"
+          className="inline-flex items-center justify-center gap-2 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold text-xs uppercase tracking-wider py-4 px-10 rounded-xl transition-all shadow-md active:scale-95"
         >
           <span>Back to the good stuff</span>
           <ArrowRight size={15} />
