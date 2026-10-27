@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import RedirectView
 from ninja import NinjaAPI
 from shop.api import router as shop_router
 
@@ -12,6 +13,12 @@ api = NinjaAPI(
 api.add_router("/shop/", shop_router)
 
 urlpatterns = [
+    # Redirect root '/' directly to admin so navigating to the backend host doesn't 404
+    path('', RedirectView.as_view(url='/admin/', permanent=False)),
+    # Official Django Admin Dashboard
     path('admin/', admin.site.urls),
+    # Support /api/admin/ alias redirecting to /admin/
+    path('api/admin/', RedirectView.as_view(url='/admin/', permanent=False)),
+    # Django Ninja API
     path('api/', api.urls),
 ]

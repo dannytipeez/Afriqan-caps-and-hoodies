@@ -328,3 +328,27 @@ class Command(BaseCommand):
         )
 
         self.stdout.write(self.style.SUCCESS("Successfully seeded Kenyan shop catalog in KES!"))
+
+        # Create or update superuser for Django Admin Dashboard
+        import os
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        admin_username = os.getenv("ADMIN_USERNAME", "admin")
+        admin_email = os.getenv("ADMIN_EMAIL", "admin@afriqan.co.ke")
+        admin_password = os.getenv("ADMIN_PASSWORD", "AfriqanAdmin2026!")
+
+        if not User.objects.filter(username=admin_username).exists():
+            User.objects.create_superuser(
+                username=admin_username,
+                email=admin_email,
+                password=admin_password
+            )
+            self.stdout.write(self.style.SUCCESS(f"Created superuser '{admin_username}' for admin dashboard access."))
+        else:
+            user = User.objects.get(username=admin_username)
+            user.is_staff = True
+            user.is_superuser = True
+            user.set_password(admin_password)
+            user.save()
+            self.stdout.write(self.style.SUCCESS(f"Updated password for superuser '{admin_username}'."))
+
