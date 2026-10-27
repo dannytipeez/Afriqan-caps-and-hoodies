@@ -115,7 +115,7 @@ export default function ProductDetailPage({
                 </span>
               )}
               {product.supports_custom_print && (
-                <span className="bg-[#7C3AED] text-white text-[10px] font-black tracking-wider px-2 py-0.5 uppercase shadow-xs flex items-center gap-1 rounded-sm">
+                <span className="bg-theme text-white text-[10px] font-black tracking-wider px-2 py-0.5 uppercase shadow-xs flex items-center gap-1 rounded-sm">
                   <Sparkles size={11} /> Custom Print Option Available (+KES 500)
                 </span>
               )}
@@ -251,21 +251,21 @@ export default function ProductDetailPage({
 
           {/* CUSTOM PRINTING ADD-ON FOR PLAIN HOODIES (KES 500) */}
           {product.supports_custom_print && (
-            <div className="p-4 bg-purple-50/50 dark:bg-purple-950/30 border-2 border-[#7C3AED] rounded-xl space-y-3">
+            <div className="p-4 bg-theme-light/40 border-2 border-theme rounded-xl space-y-3">
               <div className="flex items-center justify-between">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={enableCustomPrint}
                     onChange={(e) => setEnableCustomPrint(e.target.checked)}
-                    className="w-4 h-4 text-purple-600 rounded-xs focus:ring-0 cursor-pointer"
+                    className="w-4 h-4 text-theme rounded-xs focus:ring-0 cursor-pointer"
                   />
-                  <span className="text-xs font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
-                    <Sparkles size={14} className="text-[#7C3AED]" />
+                  <span className="text-xs font-bold text-[var(--foreground)] flex items-center gap-1.5">
+                    <Sparkles size={14} className="text-theme" />
                     Add Custom Printing
                   </span>
                 </label>
-                <span className="text-xs font-bold text-white bg-[#7C3AED] px-2.5 py-0.5 rounded-full shadow-xs">
+                <span className="text-xs font-bold text-white bg-theme px-2.5 py-0.5 rounded-full shadow-xs">
                   + KES 500 per hoodie
                 </span>
               </div>
@@ -341,10 +341,10 @@ export default function ProductDetailPage({
               </button>
             </div>
 
-            {/* Add to Bag CTA Button in Royal Purple */}
+            {/* Add to Bag CTA Button with Dynamic Theme */}
             <button
               onClick={handleAddToCart}
-              className="flex-grow bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold text-xs uppercase tracking-wider py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer active:scale-[0.99]"
+              className="flex-grow bg-theme hover:bg-theme-hover text-white font-bold text-xs uppercase tracking-wider py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer active:scale-[0.99]"
             >
               {addedSuccess ? (
                 <>

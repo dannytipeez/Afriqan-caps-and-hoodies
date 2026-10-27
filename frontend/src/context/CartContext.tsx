@@ -115,7 +115,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       objectFit: 'cover',
       zIndex: '99999',
       pointerEvents: 'none',
-      boxShadow: '0 16px 36px rgba(124, 58, 237, 0.45), 0 0 0 2px rgba(124, 58, 237, 0.6)',
+      boxShadow: '0 16px 36px var(--primary-glow), 0 0 0 2px var(--primary)',
       transition: 'none',
     });
     document.body.appendChild(clone);
@@ -171,7 +171,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         cartCountEl.animate(
           [
             { transform: 'scale(1)', color: 'inherit' },
-            { transform: 'scale(1.45)', color: '#7C3AED' },
+            { transform: 'scale(1.45)', color: 'var(--primary)' },
             { transform: 'scale(1)', color: 'inherit' },
           ],
           { duration: 280 }

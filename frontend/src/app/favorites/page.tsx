@@ -36,20 +36,20 @@ export default function FavoritesPage() {
         <div>
           <Link
             href="/shop"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-700 dark:text-purple-300 hover:text-purple-900 dark:hover:text-white transition-colors mb-3"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-theme hover:underline transition-colors mb-3"
           >
             <ArrowLeft size={14} />
             <span>Continue Shopping</span>
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 flex items-center justify-center">
-              <Heart size={20} className="fill-purple-600 text-purple-600" />
+            <div className="w-10 h-10 rounded-xl bg-theme-light text-theme flex items-center justify-center">
+              <Heart size={20} className="fill-theme text-theme" />
             </div>
             <div>
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-[#0F0E17] dark:text-[#FAF8FF]">
+              <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-[var(--foreground)]">
                 Your Favorites
               </h1>
-              <p className="text-xs text-[#5B586E] dark:text-[#B6B0D1] mt-0.5">
+              <p className="text-xs text-[var(--muted-text)] mt-0.5">
                 {favoritesCount === 1
                   ? '1 item saved for your next Nairobi streetwear rotation'
                   : `${favoritesCount} items saved for your next Nairobi streetwear rotation`}
@@ -62,7 +62,7 @@ export default function FavoritesPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleAddAllToCart}
-              className="inline-flex items-center gap-2 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold text-xs uppercase tracking-wider py-3 px-5 rounded-full transition-all shadow-sm active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-2 bg-theme hover:bg-theme-hover text-white font-bold text-xs uppercase tracking-wider py-3 px-5 rounded-full transition-all shadow-sm active:scale-95 cursor-pointer"
             >
               <ShoppingBag size={14} />
               <span>Add All to Bag</span>
@@ -82,21 +82,21 @@ export default function FavoritesPage() {
       {/* Main Content */}
       {favorites.length === 0 ? (
         <div className="py-24 text-center max-w-md mx-auto space-y-5">
-          <div className="w-16 h-16 rounded-2xl bg-purple-100 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 mx-auto flex items-center justify-center shadow-inner">
-            <Heart size={28} strokeWidth={1.5} />
+          <div className="w-16 h-16 rounded-2xl bg-theme-light text-theme mx-auto flex items-center justify-center shadow-inner">
+            <Heart size={28} strokeWidth={1.5} className="fill-theme text-theme" />
           </div>
           <div className="space-y-2">
-            <h2 className="text-xl font-bold text-[#0F0E17] dark:text-[#FAF8FF]">
+            <h2 className="text-xl font-bold text-[var(--foreground)]">
               Your wishlist is empty
             </h2>
-            <p className="text-xs text-[#5B586E] dark:text-[#B6B0D1] leading-relaxed">
+            <p className="text-xs text-[var(--muted-text)] leading-relaxed">
               Explore our Kenyan heavyweight 460 GSM hoodies and structured caps. Tap the heart on any product to save it here for later.
             </p>
           </div>
           <div className="pt-2">
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold text-xs uppercase tracking-wider py-3.5 px-8 rounded-full transition-all shadow-md active:scale-95"
+              className="inline-flex items-center gap-2 bg-theme hover:bg-theme-hover text-white font-bold text-xs uppercase tracking-wider py-3.5 px-8 rounded-full transition-all shadow-md active:scale-95"
             >
               <span>Explore Collection</span>
               <ArrowRight size={14} />

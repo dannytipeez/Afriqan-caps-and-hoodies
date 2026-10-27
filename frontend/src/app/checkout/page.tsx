@@ -367,8 +367,8 @@ export default function CheckoutPage() {
                   onClick={() => setPaymentMethod('mpesa_till')}
                   className={`py-3 px-3 text-xs font-bold rounded-xl border text-center transition-all cursor-pointer ${
                     paymentMethod === 'mpesa_till'
-                      ? 'border-[#7C3AED] bg-[#7C3AED] text-white shadow-sm'
-                      : 'border-[#E9E5F5] dark:border-[#2A2344] bg-white dark:bg-[#161718] text-[#0F0E17] dark:text-[#FAF8FF]'
+                      ? 'border-theme bg-theme text-white shadow-sm'
+                      : 'border-[var(--border-color)] bg-[var(--card-bg)] text-[var(--foreground)]'
                   }`}
                 >
                   Buy Goods Till
@@ -378,8 +378,8 @@ export default function CheckoutPage() {
                   onClick={() => setPaymentMethod('mpesa_express')}
                   className={`py-3 px-3 text-xs font-bold rounded-xl border text-center transition-all cursor-pointer ${
                     paymentMethod === 'mpesa_express'
-                      ? 'border-[#7C3AED] bg-[#7C3AED] text-white shadow-sm'
-                      : 'border-[#E9E5F5] dark:border-[#2A2344] bg-white dark:bg-[#161718] text-[#0F0E17] dark:text-[#FAF8FF]'
+                      ? 'border-theme bg-theme text-white shadow-sm'
+                      : 'border-[var(--border-color)] bg-[var(--card-bg)] text-[var(--foreground)]'
                   }`}
                 >
                   Safaricom STK
@@ -389,8 +389,8 @@ export default function CheckoutPage() {
                   onClick={() => setPaymentMethod('cod')}
                   className={`py-3 px-3 text-xs font-bold rounded-xl border text-center transition-all cursor-pointer ${
                     paymentMethod === 'cod'
-                      ? 'border-[#7C3AED] bg-[#7C3AED] text-white shadow-sm'
-                      : 'border-[#E9E5F5] dark:border-[#2A2344] bg-white dark:bg-[#161718] text-[#0F0E17] dark:text-[#FAF8FF]'
+                      ? 'border-theme bg-theme text-white shadow-sm'
+                      : 'border-[var(--border-color)] bg-[var(--card-bg)] text-[var(--foreground)]'
                   }`}
                 >
                   Cash on Delivery
@@ -399,8 +399,8 @@ export default function CheckoutPage() {
 
               {/* Till 4466556 View */}
               {paymentMethod === 'mpesa_till' && (
-                <div className="p-5 bg-white dark:bg-[#141124] border border-[#E9E5F5] dark:border-[#2A2344] rounded-2xl space-y-4 shadow-xs">
-                  <div className="relative w-full aspect-[2.3/1] max-w-md mx-auto overflow-hidden rounded-xl border border-purple-200 dark:border-purple-900/60 shadow-sm">
+                <div className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl space-y-4 shadow-xs">
+                  <div className="relative w-full aspect-[2.3/1] max-w-md mx-auto overflow-hidden rounded-xl border border-theme/30 shadow-sm">
                     <Image
                       src="/lipa-na-mpesa-till.png"
                       alt="Lipa Na M-Pesa Buy Goods Till Number 4466556"
@@ -410,14 +410,14 @@ export default function CheckoutPage() {
                     />
                   </div>
 
-                  <div className="text-xs text-[#5B586E] dark:text-[#B6B0D1] space-y-1.5 bg-purple-50/50 dark:bg-purple-950/30 p-3 rounded-xl border border-purple-100 dark:border-purple-900/40">
+                  <div className="text-xs text-[var(--muted-text)] space-y-1.5 bg-theme-light/50 p-3 rounded-xl border border-theme/20">
                     <p>1. Go to M-Pesa → Buy Goods and Services</p>
-                    <p>2. Enter Till Number: <strong className="font-mono text-purple-900 dark:text-purple-200 text-sm">4466556</strong> (AFRIQAN TEES AND CAPS HUB)</p>
-                    <p>3. Enter Amount: <strong className="text-purple-900 dark:text-purple-200 font-mono text-sm">KES {currentTotal.toLocaleString()}</strong></p>
+                    <p>2. Enter Till Number: <strong className="font-mono text-theme text-sm">4466556</strong> (AFRIQAN TEES AND CAPS HUB)</p>
+                    <p>3. Enter Amount: <strong className="text-theme font-mono text-sm">KES {currentTotal.toLocaleString()}</strong></p>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-[#0F0E17] dark:text-[#FAF8FF] mb-1">
+                    <label className="block text-xs font-bold text-[var(--foreground)] mb-1">
                       M-Pesa confirmation code (from Safaricom SMS):
                     </label>
                     <input
@@ -425,7 +425,7 @@ export default function CheckoutPage() {
                       value={mpesaReceipt}
                       onChange={(e) => setMpesaReceipt(e.target.value.toUpperCase())}
                       placeholder="e.g. NL48291072 or SGK8291KL0"
-                      className="w-full text-xs p-3.5 border border-[#E9E5F5] dark:border-[#2A2344] rounded-xl bg-white dark:bg-[#161718] uppercase font-mono font-black text-purple-900 dark:text-purple-200 tracking-wider focus:outline-none focus:ring-2 focus:ring-[#7C3AED]"
+                      className="w-full text-xs p-3.5 border border-[var(--border-color)] rounded-xl bg-white dark:bg-[#161718] uppercase font-mono font-black text-theme tracking-wider focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                     />
                   </div>
                 </div>
@@ -433,9 +433,9 @@ export default function CheckoutPage() {
 
               {/* Safaricom Express STK */}
               {paymentMethod === 'mpesa_express' && (
-                <div className="p-5 bg-white dark:bg-[#141124] border border-[#E9E5F5] dark:border-[#2A2344] rounded-2xl space-y-4 shadow-xs">
-                  <p className="text-xs text-[#5B586E] dark:text-[#B6B0D1]">
-                    Enter your Safaricom number to trigger an instant M-Pesa PIN prompt for <strong className="text-purple-900 dark:text-purple-200">KES {currentTotal.toLocaleString()}</strong>:
+                <div className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl space-y-4 shadow-xs">
+                  <p className="text-xs text-[var(--muted-text)]">
+                    Enter your Safaricom number to trigger an instant M-Pesa PIN prompt for <strong className="text-theme">KES {currentTotal.toLocaleString()}</strong>:
                   </p>
                   <div className="flex gap-2">
                     <input
@@ -443,13 +443,13 @@ export default function CheckoutPage() {
                       value={stkPhoneNumber}
                       onChange={(e) => setStkPhoneNumber(e.target.value)}
                       placeholder="0712345678"
-                      className="flex-grow text-xs p-3.5 border border-[#E9E5F5] dark:border-[#2A2344] rounded-xl bg-white dark:bg-[#161718] font-mono font-bold text-[#0F0E17] dark:text-[#FAF8FF] focus:outline-none focus:ring-2 focus:ring-[#7C3AED]"
+                      className="flex-grow text-xs p-3.5 border border-[var(--border-color)] rounded-xl bg-white dark:bg-[#161718] font-mono font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                     />
                     <button
                       type="button"
                       onClick={handleSafaricomSTKPush}
                       disabled={stkStatus.status === 'sending'}
-                      className="bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-xs font-bold px-5 py-3 rounded-xl uppercase tracking-wider transition-all cursor-pointer shadow-sm disabled:opacity-50"
+                      className="bg-theme hover:bg-theme-hover text-white text-xs font-bold px-5 py-3 rounded-xl uppercase tracking-wider transition-all cursor-pointer shadow-sm disabled:opacity-50"
                     >
                       {stkStatus.status === 'sending' ? 'Sending...' : 'Send STK'}
                     </button>
@@ -457,8 +457,8 @@ export default function CheckoutPage() {
 
                   {/* Dynamic Status Feedback */}
                   {stkStatus.status === 'prompt_sent' && (
-                    <div className="p-3.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-xs text-purple-900 dark:text-purple-200 flex items-center gap-2.5">
-                      <div className="w-4 h-4 border-2 border-purple-600 border-t-transparent rounded-full animate-spin shrink-0" />
+                    <div className="p-3.5 rounded-xl bg-theme-light border border-theme/30 text-xs text-theme flex items-center gap-2.5">
+                      <div className="w-4 h-4 border-2 border-theme border-t-transparent rounded-full animate-spin shrink-0" />
                       <span>{stkStatus.message}</span>
                     </div>
                   )}
@@ -481,7 +481,7 @@ export default function CheckoutPage() {
 
               {/* COD */}
               {paymentMethod === 'cod' && (
-                <div className="p-4 bg-purple-50/50 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-900/40 rounded-xl text-xs text-[#5B586E] dark:text-[#B6B0D1]">
+                <div className="p-4 bg-theme-light/40 border border-theme/20 rounded-xl text-xs text-[var(--muted-text)]">
                   Pay cash or via rider M-Pesa upon doorstep parcel delivery in Nairobi or across Kenya.
                 </div>
               )}
@@ -490,7 +490,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full mt-6 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold text-xs uppercase tracking-wider py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer active:scale-[0.99] disabled:opacity-50"
+                className="w-full mt-6 bg-theme hover:bg-theme-hover text-white font-bold text-xs uppercase tracking-wider py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer active:scale-[0.99] disabled:opacity-50"
               >
                 <Lock size={14} />
                 <span>

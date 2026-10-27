@@ -48,9 +48,9 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div className="atc-product group relative flex flex-col bg-white dark:bg-[#141124] rounded-2xl p-3 border border-[#E9E5F5] dark:border-[#2A2344] shadow-xs hover:shadow-md transition-all">
+    <div className="atc-product group relative flex flex-col bg-[var(--card-bg)] rounded-2xl p-3 border border-[var(--border-color)] shadow-xs hover:shadow-md transition-all">
       {/* Product Image Box */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-purple-50/50 dark:bg-[#1B162E] rounded-xl">
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-theme-light/40 rounded-xl">
         <Link href={`/products/${product.slug}`} className="block w-full h-full">
           <Image
             ref={imgRef}
@@ -64,7 +64,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Minimal badge on top-left */}
         {product.badge && (
-          <span className="absolute top-2.5 left-2.5 bg-[#7C3AED] text-white text-[10px] font-black tracking-wider px-2 py-0.5 uppercase rounded-md shadow-xs">
+          <span className="absolute top-2.5 left-2.5 bg-theme text-white text-[10px] font-black tracking-wider px-2 py-0.5 uppercase rounded-md shadow-xs">
             {product.badge}
           </span>
         )}
@@ -73,14 +73,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         <button
           onClick={handleToggleLike}
           aria-label={isLiked ? 'Remove from favorites' : 'Save to favorites'}
-          className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/90 dark:bg-black/80 backdrop-blur-xs flex items-center justify-center text-neutral-400 hover:text-[#7C3AED] dark:hover:text-[#A78BFA] transition-all cursor-pointer shadow-xs active:scale-90"
+          className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/90 dark:bg-black/80 backdrop-blur-xs flex items-center justify-center text-neutral-400 hover:text-theme transition-all cursor-pointer shadow-xs active:scale-90"
         >
           <Heart
             size={16}
             strokeWidth={2}
             className={`transition-all ${
               isLiked
-                ? 'fill-[#7C3AED] text-[#7C3AED] heart-animated'
+                ? 'fill-theme text-theme heart-animated'
                 : 'hover:scale-115'
             }`}
           />
@@ -91,7 +91,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           onClick={handleQuickAdd}
           aria-label="Add to bag"
           title="Add to bag"
-          className="atc-btn absolute bottom-2.5 right-2.5 w-9 h-9 rounded-full bg-[#7C3AED] hover:bg-[#6D28D9] text-white flex items-center justify-center shadow-md hover:scale-110 active:scale-95 transition-all cursor-pointer"
+          className="atc-btn absolute bottom-2.5 right-2.5 w-9 h-9 rounded-full bg-theme hover:bg-theme-hover text-white flex items-center justify-center shadow-md hover:scale-110 active:scale-95 transition-all cursor-pointer"
         >
           <Plus size={18} strokeWidth={2.5} />
         </button>
@@ -102,21 +102,21 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-start justify-between gap-2">
           <div className="space-y-0.5">
             <Link href={`/products/${product.slug}`}>
-              <h3 className="text-sm font-bold text-[#0F0E17] dark:text-[#FAF8FF] group-hover:text-[#7C3AED] dark:group-hover:text-[#A78BFA] transition-colors leading-tight line-clamp-1">
+              <h3 className="text-sm font-bold text-[var(--foreground)] group-hover:text-theme transition-colors leading-tight line-clamp-1">
                 {product.name}
               </h3>
             </Link>
-            <p className="text-[11px] text-[#5B586E] dark:text-[#B6B0D1] line-clamp-1">{product.tagline}</p>
+            <p className="text-[11px] text-[var(--muted-text)] line-clamp-1">{product.tagline}</p>
           </div>
-          <span className="text-sm font-black text-[#0F0E17] dark:text-[#FAF8FF] whitespace-nowrap">
+          <span className="text-sm font-black text-[var(--foreground)] whitespace-nowrap">
             KES {product.price.toLocaleString()}
           </span>
         </div>
 
         {/* Custom print add-on badge */}
         {product.supports_custom_print && (
-          <div className="mt-2 flex items-center gap-1 text-[10px] font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50 px-2 py-0.5 rounded-md w-fit border border-purple-200/60 dark:border-purple-800/60">
-            <Sparkles size={10} className="text-purple-600" />
+          <div className="mt-2 flex items-center gap-1 text-[10px] font-bold text-theme bg-theme-light px-2 py-0.5 rounded-md w-fit border border-theme/20">
+            <Sparkles size={10} className="text-theme" />
             <span>Custom print add-on +KES 500</span>
           </div>
         )}
@@ -133,7 +133,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 aria-label={`Select color ${c.name}`}
                 className={`w-3.5 h-3.5 rounded-full border transition-all ${
                   isSelected
-                    ? 'ring-2 ring-offset-1 ring-[#7C3AED] border-transparent scale-110'
+                    ? 'ring-2 ring-offset-1 ring-theme border-transparent scale-110'
                     : 'border-black/20 dark:border-white/20 hover:scale-105'
                 }`}
                 style={{ backgroundColor: c.hex }}

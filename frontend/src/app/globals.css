@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf8ff;
+  --background: #faf9f6;
   --foreground: #0f0e17;
   --card-bg: #ffffff;
   --border-color: #e9e5f5;
   --muted-text: #5b586e;
-  --primary: #7c3aed;
-  --primary-hover: #6d28d9;
-  --primary-light: #ede9fe;
-  --primary-text: #4c1d95;
-  --accent-purple: #8b5cf6;
-  --deep-purple: #3b0764;
+  --primary: #e5833b;
+  --primary-hover: #d36f26;
+  --primary-light: #fef4eb;
+  --primary-text: #8e400e;
+  --primary-glow: rgba(229, 131, 59, 0.45);
+  --primary-ring: #e5833b;
 }
 
 body.dark {
-  --background: #0b0914;
+  --background: #0d0c15;
   --foreground: #faf8ff;
-  --card-bg: #141124;
-  --border-color: #2a2344;
+  --card-bg: #151322;
+  --border-color: #272338;
   --muted-text: #b6b0d1;
-  --primary: #8b5cf6;
-  --primary-hover: #7c3aed;
-  --primary-light: #241b3d;
-  --primary-text: #e9d5ff;
-  --accent-purple: #a78bfa;
-  --deep-purple: #581c87;
+  --primary: #e5833b;
+  --primary-hover: #d36f26;
+  --primary-light: #391b08;
+  --primary-text: #fdba74;
+  --primary-glow: rgba(229, 131, 59, 0.55);
+  --primary-ring: #e5833b;
 }
 
 body {
@@ -38,6 +38,38 @@ body {
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
+/* Custom theme dynamic helper utility classes */
+.bg-theme {
+  background-color: var(--primary) !important;
+}
+.hover\:bg-theme-hover:hover {
+  background-color: var(--primary-hover) !important;
+}
+.text-theme {
+  color: var(--primary) !important;
+}
+.text-theme-contrast {
+  color: var(--primary-text) !important;
+}
+.border-theme {
+  border-color: var(--primary) !important;
+}
+.border-theme-light {
+  border-color: var(--primary-light) !important;
+}
+.bg-theme-light {
+  background-color: var(--primary-light) !important;
+}
+.fill-theme {
+  fill: var(--primary) !important;
+}
+.stroke-theme {
+  stroke: var(--primary) !important;
+}
+.ring-theme {
+  --tw-ring-color: var(--primary) !important;
+}
+
 /* Custom minimal scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -47,11 +79,12 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c4b5fd;
+  background: var(--primary);
+  opacity: 0.5;
   border-radius: 4px;
 }
 body.dark ::-webkit-scrollbar-thumb {
-  background: #4c1d95;
+  background: var(--primary-hover);
 }
 
 /* Heart bounce animation for favorites */
