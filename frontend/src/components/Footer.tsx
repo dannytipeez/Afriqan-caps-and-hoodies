@@ -72,6 +72,7 @@ export default function Footer() {
               <li><Link href="/our-story" className="hover:text-black">Our Nairobi Story</Link></li>
               <li><Link href="#" className="hover:text-black">Local Materials</Link></li>
               <li><Link href="#" className="hover:text-black">Stockists in Kenya</Link></li>
+              <li><Link href="/admin" className="hover:text-black font-semibold text-neutral-800">Admin Portal</Link></li>
             </ul>
           </div>
         </div>
