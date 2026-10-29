@@ -13,6 +13,7 @@ export interface AccentConfig {
   light: string;
   darkLight: string;
   text: string;
+  darkText: string;
   glow: string;
 }
 
@@ -25,6 +26,7 @@ export const ACCENT_PALETTES: Record<AccentColor, AccentConfig> = {
     light: '#EDF4FC',
     darkLight: '#14273E',
     text: '#1C4677',
+    darkText: '#93C5FD',
     glow: 'rgba(79, 134, 198, 0.45)',
   },
   green: {
@@ -35,6 +37,7 @@ export const ACCENT_PALETTES: Record<AccentColor, AccentConfig> = {
     light: '#EAF7F0',
     darkLight: '#102B1E',
     text: '#155B37',
+    darkText: '#86EFAC',
     glow: 'rgba(72, 169, 122, 0.45)',
   },
   orange: {
@@ -45,6 +48,7 @@ export const ACCENT_PALETTES: Record<AccentColor, AccentConfig> = {
     light: '#FEF4EB',
     darkLight: '#391B08',
     text: '#8E400E',
+    darkText: '#FDBA74',
     glow: 'rgba(229, 131, 59, 0.45)',
   },
   pink: {
@@ -55,6 +59,7 @@ export const ACCENT_PALETTES: Record<AccentColor, AccentConfig> = {
     light: '#FDEEF3',
     darkLight: '#380B19',
     text: '#91123B',
+    darkText: '#F472B6',
     glow: 'rgba(228, 56, 110, 0.45)',
   },
   purple: {
@@ -65,6 +70,7 @@ export const ACCENT_PALETTES: Record<AccentColor, AccentConfig> = {
     light: '#F5F3FF',
     darkLight: '#240F47',
     text: '#4C1D95',
+    darkText: '#C4B5FD',
     glow: 'rgba(124, 58, 237, 0.45)',
   },
 };
@@ -108,15 +114,24 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const body = document.body;
     const cfg = ACCENT_PALETTES[activeAccent] || ACCENT_PALETTES.orange;
 
-    root.style.setProperty('--primary', cfg.hex);
-    root.style.setProperty('--primary-hover', cfg.hover);
-    root.style.setProperty(
-      '--primary-light',
-      activeMode === 'dark' ? cfg.darkLight : cfg.light
-    );
-    root.style.setProperty('--primary-text', cfg.text);
-    root.style.setProperty('--primary-glow', cfg.glow);
-    root.style.setProperty('--primary-ring', cfg.hex);
+    const setProps = (target: HTMLElement | null) => {
+      if (!target) return;
+      target.style.setProperty('--primary', cfg.hex);
+      target.style.setProperty('--primary-hover', cfg.hover);
+      target.style.setProperty(
+        '--primary-light',
+        activeMode === 'dark' ? cfg.darkLight : cfg.light
+      );
+      target.style.setProperty(
+        '--primary-text',
+        activeMode === 'dark' ? cfg.darkText : cfg.text
+      );
+      target.style.setProperty('--primary-glow', cfg.glow);
+      target.style.setProperty('--primary-ring', cfg.hex);
+    };
+
+    setProps(root);
+    setProps(body);
 
     if (activeMode === 'dark') {
       body.classList.add('dark');
@@ -175,3 +190,4 @@ export function useTheme() {
   }
   return context;
 }
+

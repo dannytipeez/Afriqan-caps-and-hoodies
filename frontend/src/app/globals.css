@@ -14,18 +14,13 @@
   --primary-ring: #e5833b;
 }
 
+html.dark,
 body.dark {
   --background: #0d0c15;
   --foreground: #faf8ff;
   --card-bg: #151322;
   --border-color: #272338;
   --muted-text: #b6b0d1;
-  --primary: #e5833b;
-  --primary-hover: #d36f26;
-  --primary-light: #391b08;
-  --primary-text: #fdba74;
-  --primary-glow: rgba(229, 131, 59, 0.55);
-  --primary-ring: #e5833b;
 }
 
 body {
